@@ -1,0 +1,93 @@
+<section class="card" id="product-form">
+    <div class="card-head">
+        <div>
+            <h2>{{product?._id ? 'Edit product' : 'Add product'}}</h2>
+            <div class="hint">Fields marked with <span class="req">*</span> are required</div>
+        </div>
+        <span 
+        class="badge" 
+        [ngClass]="{
+            'badge-ok': (productForm.value['isActive']), 
+            'badge-idle': (!productForm.value['isActive'])}"
+            >
+            {{(productForm.value['isActive']) ? 'Active' :  'Draft'}}
+        </span>
+    </div>
+    <div class="card-body">
+        <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+            <div class="form-grid">
+                <div class="field span-2">
+                    <label for="p-name">Product name <span class="req">*</span></label>
+                    <input id="p-name" formControlName="title" type="text" placeholder="e.g. Linen Overshirt">
+                    <!-- <label class="errMsg">This field is required</label> -->
+                </div>
+                
+                <div class="field">
+                    <label for="p-sku">Slug <span class="req">*</span></label>
+                    <input formControlName="slug" id="p-sku" type="text" placeholder="e.g. product_name">
+                </div>                
+                <div class="field">
+                    <label for="p-cat">Category <span class="req">*</span></label>
+                    <select (change)="onCategorySelect($event)" id="p-cat" formControlName="catagory">
+                        @for (category of categories; track $index) {
+                            <option [value]="category._id">{{category.name}}</option>
+                        }
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="p-subcat">Subcategory <span class="req">*</span></label>
+                    <fieldset [disabled]="subcategories == null" style="border: none;margin: 0;padding: 0;">
+                        <select [ngClass]='{"disabled": subcategories == null}' id="p-subcat" formControlName="subCatagory">
+                            @for (subcategory of subcategories; track $index) {
+                                <option value="{{subcategory._id}}">{{subcategory.name}}</option>
+                            }
+                        </select>
+                    </fieldset>
+                </div>
+                <div class="field">
+                    <label for="p-price">Price <span class="req">*</span></label>
+                    <div class="input-suffix"><input formControlName="price" id="p-price" type="number" placeholder="0.00"><span>USD</span></div>
+                </div>
+                <div class="field">
+                    <label for="p-stock">Stock quantity <span class="req">*</span></label>
+                    <input formControlName="stock" id="p-stock" type="number" placeholder="0" />
+                </div>
+                <div class="field">
+                    <label for="p-status">Status</label>
+                    <select id="p-status" (change)="changeStatus($event)">
+                        <option value="true">Active</option>
+                        <option value="false">Draft</option>
+                    </select>
+                </div>
+                <div class="field span-2">
+                    <label for="p-desc">Description <span class="req">*</span></label>
+                    <textarea formControlName="desc" id="p-desc" placeholder="Materials, fit, care instructions…"></textarea>
+                </div>
+                <div class="field" style="justify-content: end;">
+                    <div class="inlineField">
+                        <label for="p-compare">new Arrivals: </label>
+                        <input  formControlName="newArrivals" id="p-compare" type="checkbox">
+                    </div>
+                    <div class="inlineField">
+                        <label for="p-compare">most Popular: </label>
+                        <input formControlName="mostPopular" id="p-compare" type="checkbox">
+                    </div>
+                </div>
+
+                <div class="field span-2">
+                    <label>Product images</label>
+                    <div class="upload-well">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+                        <div>Drag images here, or <strong style="color:var(--accent-ink);">browse</strong></div>
+                        <div>PNG or JPG, up to 5MB each</div>
+                        <input type="file" (change)="setImg($event)" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button (click)="discard()" type="button" class="btn btn-secondary" >Discard</button>
+                <button class="btn btn-primary">{{product?._id ? 'Edit' : 'Save'}}  product</button>
+            </div>
+        </form>
+    </div>
+</section>

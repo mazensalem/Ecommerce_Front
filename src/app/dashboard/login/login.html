@@ -1,0 +1,59 @@
+<div class="auth-shell">
+  <!-- ===================== VISUAL SIDE ===================== -->
+  <aside class="auth-visual">
+    <div class="brand">
+      <div class="brand-mark">S</div>
+      <div>
+        <div class="brand-name">Storefront</div>
+        <div class="brand-sub">Admin Console</div>
+      </div>
+    </div>
+
+    <div class="auth-quote">
+      <p>“Everything the store needs — products, orders, and content — in one console.”</p>
+      <div class="who">Admin Console · v2.4</div>
+    </div>
+
+    <div class="auth-stats"></div>
+  </aside>
+
+  <!-- ===================== FORM SIDE ===================== -->
+  <section class="auth-form-col">
+    <div class="auth-box">
+      <div class="brand-mark">S</div>
+      <h1>Sign in to Admin</h1>
+      <div class="sub">Enter your credentials to access the console</div>
+
+      <!-- Example inline error state — remove when not needed -->
+      <div class="auth-alert" [style]="'display:' + (invalid ? 'block' : 'none')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v5"/><path d="M12 16h.01"/></svg>
+        <div>Incorrect email or password. Please try again.</div>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="submit()">
+        <div class="field">
+          <label for="l-email">Email address</label>
+          <input formControlName="email" id="l-email" type="email" placeholder="name@storefront.com">
+          @if (loginForm.controls['email'].invalid && loginForm.controls['email'].touched) {
+            @if (loginForm.controls['email'].errors?.['required']){
+                <label class="errMsg">you must enter email</label>
+            }
+            @else {
+                <label class="errMsg">This email is not valid</label>
+            }
+          }
+        </div>
+
+        <div class="field">
+          <label for="l-pass">Password</label>
+          <input formControlName="password" id="l-pass" type="password" placeholder="••••••••">
+          @if (loginForm.controls['password'].invalid && loginForm.controls['password'].touched){
+            <label class="errMsg">The password is required</label>
+          }
+        </div>
+
+        <button [disabled]="loginForm.invalid" type="submit" class="btn btn-primary btn-block">Sign in</button>
+      </form>
+    </div>
+  </section>
+</div>

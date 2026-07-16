@@ -1,0 +1,8 @@
+.errMsg {
+    color: red;
+    font: smaller;
+}
+
+input.ng-touched.ng-invalid{
+    border: 1px red solid;
+}

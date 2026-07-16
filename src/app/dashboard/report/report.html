@@ -1,0 +1,112 @@
+<!-- stat cards -->
+<section class="stat-grid">
+<div class="stat-card rail rail-accent">
+    <div class="stat-top">
+    <div class="stat-icon" style="background:var(--accent-tint); color:var(--accent-ink);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.6 12.4a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 7H6"/></svg>
+    </div>
+    </div>
+    <div class="stat-value">{{totalOrders}}</div>
+    <div class="stat-label">Orders this month</div>
+    <!-- <div class="stat-delta up">▲ 12.4% vs last month</div> -->
+</div>
+
+<div class="stat-card rail rail-ok">
+    <div class="stat-top">
+    <div class="stat-icon" style="background:var(--ok-tint); color:var(--ok);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+    </div>
+    </div>
+    <div class="stat-value">${{totalRevenue}}</div>
+    <div class="stat-label">Revenue this month</div>
+    <!-- <div class="stat-delta up">▲ 8.1% vs last month</div> -->
+</div>
+
+<div class="stat-card rail rail-warn">
+    <div class="stat-top">
+    <div class="stat-icon" style="background:var(--warn-tint); color:var(--warn);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/></svg>
+    </div>
+    </div>
+    <div class="stat-value">{{totalProducts}}</div>
+    <div class="stat-label">Active products</div>
+    <!-- <div class="stat-delta down">▼ 6 low stock</div> -->
+</div>
+
+<div class="stat-card rail rail-idle">
+    <div class="stat-top">
+    <div class="stat-icon" style="background:var(--idle-tint); color:var(--idle);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+    </div>
+    </div>
+    <div class="stat-value">{{totalCustomers}}</div>
+    <div class="stat-label">Registered customers</div>
+    <!-- <div class="stat-delta up">▲ 214 new this month</div> -->
+</div>
+</section>
+
+<div class="two-col">
+<!-- recent orders -->
+<section class="card">
+    <div class="card-head">
+    <div>
+        <h2>Recent orders</h2>
+        <div class="hint">Latest 5 orders across the store</div>
+    </div>
+    <a routerLink="/admin/orders" class="btn btn-secondary btn-sm">View all</a>
+    </div>
+    <div class="card-body flush">
+    <table>
+        <thead>
+        <tr><th>Order</th><th>Customer</th><th>Date</th><th>Total</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+            @for (order of latestOrders; track $index) {
+                <tr>
+                    <td class="cell-mono">{{order._id.slice(-5)}}</td>
+                    <td class="cell-primary">{{order.userId.name}}</td>
+                    <td class="cell-muted">{{order.createdAt | date : 'mediumDate'}}</td>
+                    <td>${{order.products.reduce((ac, el)=>ac + el.pricePerUnit*el.quantity, 0)}}</td>
+                    <td>
+                        <span class="badge badge-warn" [ngClass]="orderClassCondition(order.status)">
+                            {{order.status}}
+                        </span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    </div>
+</section>
+
+<!-- low stock + quick links -->
+<div style="display:flex; flex-direction:column; gap:18px;">
+    <section class="card">
+        <div class="card-head">
+            <h2>Low stock</h2>
+        </div>
+        <div class="card-body" style="display:flex; flex-direction:column; gap:12px;">
+            @for (product of lowStockProducts; track $index) {
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <div class="thumb"><img width="100%" height="100%" alt="product image" [src]="staticFilesPath + product.imgUrl" /></div>
+                    <div style="flex:1;">
+                        <div class="cell-primary" style="font-size:13px;">{{product.title}}</div>
+                        <div class="cell-muted" style="font-size:12px;">{{product.slug}}</div>
+                    </div>
+                    <span class="badge badge-bad">{{product.stock}} left</span>
+                </div>
+            }
+            
+        </div>
+    </section>
+
+    <section class="card">
+    <div class="card-head"><h2>Quick actions</h2></div>
+    <div class="card-body" style="display:flex; flex-direction:column; gap:8px;">
+        <a routerLink="/admin/products" class="btn btn-secondary btn-block">+ Add product</a>
+        <a routerLink="/admin/categories" class="btn btn-secondary btn-block">+ Add category</a>
+        <a routerLink="/admin/admins" class="btn btn-secondary btn-block">+ Invite admin</a>
+    </div>
+    </section>
+</div>
+</div>
