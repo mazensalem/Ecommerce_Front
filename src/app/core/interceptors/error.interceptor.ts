@@ -13,7 +13,8 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       _adminService.logout();
       _router.navigate(['/login']);
     }else if (err.status == 404){
-      _router.navigate(['/notfound']);
+      // _router.navigate(['/notfound']);
+      alert('something is not found');
     }else{
       alert('something went wrong');
     }

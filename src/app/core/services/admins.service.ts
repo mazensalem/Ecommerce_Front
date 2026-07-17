@@ -22,6 +22,23 @@ export class AdminsService {
     return null;
   }
 
+  getAllAdmins(){
+    return this._http.get<IResponse<IAdmin[]>>(this.url);
+  }
+
+
+  createAdmin(Data:{name:string, email:string, password:string}){
+    return this._http.post<IResponse<IAdmin>>(this.url + 'create/', Data);
+  }
+
+  deleteAdmin(id:string){
+    return this._http.delete<IResponse<null>>(this.url + `delete/${id}`);
+  }
+
+  editeAdmin(id:string, name:string){
+    return this._http.put<IResponse<IAdmin>>(this.url + 'edit', {name});
+  }
+
   login(email:string, password:string){
     return this._http.post<IResponse<string>>(this.url + 'login', {email, password});
   }

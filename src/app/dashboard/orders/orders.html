@@ -1,1 +1,142 @@
-<p>orders works!</p>
+<section class="card" style="margin-bottom:20px;">
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <div class="tabs">
+        <div (click)="setStatus('ALL')" class="tab" [ngClass]="{'active': filters.status == 'ALL'}">All</div>
+        <div (click)="setStatus('Pendding')" class="tab" [ngClass]="{'active': filters.status == 'Pendding'}">Pending</div>
+        <div (click)="setStatus('Preparing')" class="tab" [ngClass]="{'active': filters.status == 'Preparing'}">Preparing</div>
+        <div (click)="setStatus('Shipped')" class="tab" [ngClass]="{'active': filters.status == 'Shipped'}">Shipped</div>
+        <div (click)="setStatus('Recieved')" class="tab" [ngClass]="{'active': filters.status == 'Recieved'}">Recieved</div>
+        <div (click)="setStatus('Cancelled')" class="tab" [ngClass]="{'active': filters.status == 'Cancelled'}">Cancelled</div>
+      </div>
+    </div>
+    <div class="toolbar-left">
+      <input (change)="setDate($event)" type="date" class="filter-select">
+    </div>
+  </div>
+
+
+  <div class="card-body flush">
+    <table>
+      <thead>
+        <tr>
+          <th class="checkbox-cell"></th>
+          <th>Order</th><th>Customer</th><th>Date</th><th>Items</th><th>Total</th><th>Status</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+
+        @for (order of orders; track $index) {
+          <tr class="rail" [ngClass]="{
+                'rail-warn': order.status == 'Preparing',
+                'rail-accent': order.status == 'Shipped',
+                'rail-bad': order.status == 'Canceled by admin' || order.status == 'Canceled by user' || order.status == 'Rejected',
+                'rail-idle': order.status == 'Pendding',
+                'rail-ok': order.status == 'Recieved'
+              }">
+            <td class="cell-mono cell-primary">#{{order._id.slice(-5)}} </td>
+            <td>{{order.userId.name}}</td>
+            <td class="cell-muted">{{order.createdAt | date }}</td>
+            <td class="cell-muted">{{order.products.length}} items</td>
+            <td>$ {{order.products.reduce((ac, el)=>el.pricePerUnit * el.quantity, 0)}}</td>
+            <td>
+              <span class="badge" 
+              [ngClass]="{
+                'badge-warn': order.status == 'Preparing',
+                'badge-accent': order.status == 'Shipped',
+                'badge-bad': order.status == 'Canceled by admin' || order.status == 'Canceled by user' || order.status == 'Rejected',
+                'badge-idle': order.status == 'Pendding',
+                'badge-ok': order.status == 'Recieved',
+              }"
+              >
+                {{order.status}}
+              </span>
+            </td>
+            <td class="row-actions"><button (click)="selectOrder(order)" class="btn btn-ghost btn-sm">Open</button></td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    <div class="pager">
+      <span class="count">Showing {{ordersPerPage}} of {{totalOrders}} orders</span>
+      <div class="pager-btns">
+        <button class="page-btn" (click)="decPage()" [ngClass]="{'disabled': currentPage == 1}" [disabled]="currentPage == 1">‹</button>
+        @for (page of [currentPage - 1, currentPage, currentPage + 1]; track $index) {
+          @if (page != 0 && page <= totalPages) {
+            <button (click)="setPage(page)" class="page-btn" [ngClass]="{'active': page == currentPage}">{{page}}</button>
+          }
+        }
+        <button class="page-btn" (click)="incPage()" [ngClass]="{'disabled': currentPage == totalPages}" [disabled]="currentPage == totalPages">›</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ order detail / status edit ============ -->
+ @if (selectedOrder){
+  <section class="card" id="order-detail">
+    <div class="card-head">
+      <div>
+        <h2>Order #{{selectedOrder._id.slice(-5)}}</h2>
+        <div class="hint">Placed {{selectedOrder.createdAt | date : "MMM d, yyyy · h:mm a"}} by {{selectedOrder.userId.name}}</div>
+      </div>
+      <span class="badge" [ngClass]="{
+            'badge-warn': selectedOrder.status == 'Preparing',
+            'badge-accent': selectedOrder.status == 'Shipped',
+            'badge-bad': selectedOrder.status == 'Canceled by admin' || selectedOrder.status == 'Canceled by user' || selectedOrder.status == 'Rejected',
+            'badge-idle': selectedOrder.status == 'Pendding',
+            'badge-ok': selectedOrder.status == 'Recieved'}">
+                {{selectedOrder.status}}
+      </span>
+  </div>
+
+
+  <div class="card-body">
+    <div class="two-col">
+      <div>
+        <div class="eyebrow">Items</div>
+        <table style="margin-bottom:18px;">
+          <thead><tr><th>Product</th><th>Qty</th><th>Price</th><th>Subtotal</th></tr></thead>
+          <tbody>
+            @for (product of selectedOrder.products; track $index) {
+              <tr><td><div class="row-media"><div class="thumb"></div>{{product.productId.title}}</div></td><td>{{product.quantity}}</td><td>${{product.pricePerUnit}}</td><td>${{product.quantity * product.pricePerUnit}}</td></tr>
+            }
+          </tbody>
+        </table>
+
+        <div class="eyebrow">Shipping address</div>
+        <p class="cell-muted" style="margin:0 0 18px; font-size:13.5px; line-height:1.7;">
+          {{selectedOrder.address.address}}<br>
+          {{selectedOrder.address.phone}}
+        </p>
+
+        <div class="eyebrow">Order total</div>
+        <table>
+          <tbody>
+            <tr><td class="cell-primary">Total</td><td style="text-align:right;" class="cell-primary">${{selectedOrder.products.reduce((ac, el)=>el.pricePerUnit*el.quantity, 0)}}</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div>
+        <form [formGroup]="orderStatusForm" (ngSubmit)="saveOrderStatus()">
+          <div class="field">
+            <label for="o-status">Order status</label>
+            <select id="o-status" formControlName="status">
+              <option [selected]="selectedOrder.status == 'Pendding'" value="Pendding">Pending</option>
+              <option [selected]="selectedOrder.status == 'Preparing'" value="Preparing">Preparing</option>
+              <option [selected]="selectedOrder.status == 'Shipped'" value="Shipped">Shipped</option>
+              <option [selected]="selectedOrder.status == 'Recieved'" value="Recieved">Recieved</option>
+              <option [selected]="selectedOrder.status == 'Canceled by admin'" value="Canceled by admin">Cancelled</option>
+            </select>
+          </div>
+          <div class="form-actions">
+            <button (click)="cancel()" class="btn btn-danger">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+ }

@@ -1,1 +1,56 @@
-<p>catagories works!</p>
+<div class="two-col">
+    <section class="card">
+        <div class="toolbar">
+            <div class="toolbar-left">
+                <h2 style="font-size:15px;">All categories</h2>
+            </div>
+        </div>
+
+        <div class="card-body flush">
+            <ul class="tree">
+                @for (category of categories; track $index) {
+                    <li class="tree-node">
+                        <div class="tree-row">
+                            <div class="swatch" style="background:#DCE6FB;">
+                                <img width="100%" height="100%" [src]="staticFilesPath + category.imgUrl" />
+                            </div>
+                            <div class="name">{{category.name}}</div>
+                            <div class="count">{{category.subCategories[0]._id ? category.subCategories.length : 0}} subcategories</div>
+                            <span class="badge" [ngClass]="{'badge-ok': category.isActive, 'badge-idle': !category.isActive}">
+                                {{category.isActive ? 'Visible' : 'Draft'}}
+                            </span>
+                            <div class="row-actions" style="margin-left:12px;">
+                                <button type="button" (click)="selectCategory(category)" class="btn btn-ghost btn-sm">Edit</button>
+                                <button type="button" (click)="deleteCategory(category._id)" class="btn btn-danger btn-sm">Delete</button>
+                            </div>
+                        </div>
+                        <div class="tree-children">
+                            @for (subcategory of category.subCategories; track $index) {
+                                @if (subcategory._id){
+                                    <div class="tree-row">
+                                        <span style="width:18px;"></span>
+                                        <div class="swatch" style="width:20px;height:20px;background:#EAF0FC;">
+                                            <img width="100%" height="100%" [src]="staticFilesPath + subcategory.imgUrl" />
+                                        </div>
+                                        <div class="name">{{subcategory.name}}</div>
+                                        <div class="count">{{subcategory.productCount}} products</div>
+                                        <span class="badge" [ngClass]="{'badge-ok': subcategory.isActive, 'badge-idle': !subcategory.isActive}">
+                                            {{subcategory.isActive ? 'Visible' : 'Draft'}}
+                                        </span>
+                                        <div class="row-actions" style="margin-left:12px;">
+                                            <button type="button" (click)="selectSubCategory(subcategory)" class="btn btn-ghost btn-sm">Edit</button>
+                                            <button type="button" (click)="deleteSubCategory(subcategory._id)" class="btn btn-danger btn-sm">Delete</button>
+                                        </div>
+                                    </div>
+                                }
+                            }
+
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </section>
+
+    <app-add-edit-form [category]="selectedCategory" [subCategory]="selectedSubCategory" (Finished)="refresh()"></app-add-edit-form>
+</div>

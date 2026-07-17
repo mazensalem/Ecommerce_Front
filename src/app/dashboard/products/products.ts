@@ -43,6 +43,8 @@ export class Products implements OnInit {
         this.totalProductsCount = Number(res.msg);
         this.productsPerPage = Math.min(this.totalProductsCount, 10);
         this.totalPages = Math.ceil(this.totalProductsCount / this.productsPerPage);
+
+        console.log(this.products);
         
         this._cdr.detectChanges();
       },

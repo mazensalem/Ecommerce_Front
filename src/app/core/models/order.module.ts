@@ -1,7 +1,8 @@
+import { IProduct } from "./products.module";
 import { IUser } from "./user.module";
 
 interface ProductOrder {
-    productId: string,
+    productId: IProduct,
     pricePerUnit: number,
     quantity: number,
 }

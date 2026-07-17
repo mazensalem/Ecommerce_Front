@@ -1,8 +1,75 @@
-<div class="container">
-    <main class="content">
-        <header><h1>Page Title</h1></header>
-        <section id="main-content">
-            <!-- Page specific content goes here -->
-        </section>
-    </main>
+<div class="two-col">
+
+<!-- ============ admin list ============ -->
+<section class="card">
+    <div class="toolbar">
+        <div class="toolbar-left">
+            <h2 style="font-size:15px;">Team members</h2>
+            <span class="badge badge-idle">{{totalAdmins}} total</span>
+        </div>
+    </div>
+    <div class="card-body flush">
+        <table>
+            <thead>
+            <tr>
+                <th>Admin</th><th>Role</th><th></th>
+            </tr>
+            </thead>
+            <tbody>
+                @for (admin of admins; track $index) {
+                    <tr>
+                        <td>
+                            <div class="row-media">
+                                <div class="avatar-sm">{{admin.name.slice(0, 2)}}</div>
+                                <div>
+                                    <div class="cell-primary">{{admin.name}}</div>
+                                    <div class="cell-muted" style="font-size:12px;">{{admin.email}}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge badge-accent">Admin</span></td>
+                        <td class="row-actions">
+                            @if (currentAdminId != admin._id) {
+                                <button (click)="deleteAdmin(admin._id)" class="btn btn-danger btn-sm">Delete</button>
+                            }
+                            @else {
+                                <button (click)="selectAdmin(admin)" class="btn btn-ghost btn-sm">Edit</button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ============ add admin form ============ -->
+<section class="card">
+    <div class="card-head">
+    <div>
+        <h2>{{selectedAdmin == null ? 'Add' : 'Edit'}} admin</h2>
+    </div>
+    </div>
+    <div class="card-body">
+    <form [formGroup]="adminsForm" (ngSubmit)="onSubmit()">
+        <div class="field">
+            <label for="a-name">Full name <span class="req">*</span></label>
+            <input formControlName="name" id="a-name" type="text" placeholder="e.g. Salma Adel">
+        </div>
+        <div class="field">
+            <label for="a-email">Email address <span class="req">*</span></label>
+            <input [ngClass]="{'disabled': selectedAdmin != null}" [disabled]="selectedAdmin != null" formControlName="email" id="a-email" type="email" placeholder="name@storefront.com">
+        </div>
+        <div class="field">
+            <label for="a-pass">password <span class="req">*</span></label>
+            <input [ngClass]="{'disabled': selectedAdmin != null}" [disabled]="selectedAdmin != null" id="a-pass" type="password" formControlName="password">
+        </div>
+        <div class="form-actions">
+            <button type="button" (click)="cancel()" class="btn btn-secondary">Cancel</button>
+            <button type="submit" class="btn btn-primary">+ Add admin</button>
+        </div>
+    </form>
+    </div>
+</section>
+
 </div>

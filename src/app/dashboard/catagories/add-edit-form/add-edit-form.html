@@ -1,0 +1,52 @@
+<!-- ============ add category form ============ -->
+<section class="card">
+    <div class="card-head">
+        <div>
+            <h2>{{ (category || subCategory) ? 'Edit': 'Add' }} category</h2>
+            <div class="hint">Leave "Parent category" empty to create a top-level category</div>
+        </div>
+    </div>
+    <div class="card-body">
+        <form [formGroup]="categoryForm" (ngSubmit)="onSumbit()">
+            <div class="field">
+                <label for="c-name">Name <span class="req">*</span></label>
+                <input id="c-name" type="text" placeholder="e.g. Footwear" formControlName="name">
+            </div>
+            <div class="field">
+                <label for="c-slug">URL slug <span class="req">*</span></label>
+                <input id="c-slug" type="text" placeholder="e.g. footwear" formControlName="slug">
+            </div>
+            <div class="field">
+                <label for="c-parent">Parent category</label>
+                <select id="c-parent" (change)="selectParentCategory($event)">
+                    @if (category || !subCategory) {
+                        <option value="NONE">— None (top-level) —</option>
+                    }
+                    @if (subCategory || !category) {
+                        @for (category of categories; track $index) {
+                            <option value="{{category._id}}">{{category.name}}</option>
+                        }
+                    }
+                </select>
+                <span class="help">Selecting a parent makes this a subcategory</span>
+            </div>
+            <div class="field">
+                <label>Category image</label>
+                <div class="upload-well">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+                    <div>Drag an image here, or <strong style="color:var(--accent-ink);">browse</strong></div>
+                    <input type="file" (change)="setImg($event)" />
+                </div>
+            </div>
+            <label class="toggle">
+                <input formControlName="isActive" type="checkbox" checked>
+                <span class="track"></span>
+                <span class="toggle-label">Visible in storefront navigation</span>
+            </label>
+            <div class="form-actions">
+                <button (click)="discard()" type="button" class="btn btn-secondary">Cancel</button>
+                <button class="btn btn-primary">{{(category || subCategory) ? 'Edit' : 'Save'}} category</button>
+            </div>
+        </form>
+    </div>
+</section>

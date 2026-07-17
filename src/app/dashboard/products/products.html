@@ -38,7 +38,11 @@
                     </div>
                 </td>
                 <td class="cell-mono">{{product.slug}}</td>
-                <td class="cell-muted">{{product.catagory.name}} / {{product.subCatagory.name}}</td>
+                <td class="cell-muted">
+                    @if (product.catagory && product.subCatagory) {
+                        {{product.catagory.name}} / {{product.subCatagory.name}}
+                    }
+                </td>
                 <td>${{product.price}}</td>
                 <td>
                     <span class="badge" [ngClass]="{'badge-bad': product.stock <= 10, 'badge-ok': product.stock > 10}">{{product.stock}}</span>
