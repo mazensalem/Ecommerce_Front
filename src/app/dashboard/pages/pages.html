@@ -1,1 +1,62 @@
-<p>pages works!</p>
+<div class="two-col">
+    <section class="card">
+        <div class="toolbar">
+        <h2 style="font-size:15px;">All pages</h2>
+        </div>
+        <div class="card-body flush">
+            @for (page of pages; track $index) {
+                <div class="page-list-item rail"  [ngClass]="{'rail-ok': page.active, 'rail-idle': !page.active}">
+                    <div class="doc-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h6"/><path d="M14 3h7v7"/><path d="M10 14L21 3"/></svg>
+                    </div>
+                    <div class="meta">
+                    <div class="t">{{page.title}}</div>
+                    <div class="s">/pages/{{page.slug}}</div>
+                    </div>
+                    <span class="badge" [ngClass]="{'badge-ok': page.active, 'badge-idle': !page.active}">{{page.active ? 'Published' : 'Draft' }}</span>
+                    <div class="row-actions" style="margin-left:12px;">
+                        <button (click)="selectPage(page)" class="btn btn-ghost btn-sm">Edit</button>
+                        <button (click)="deletePage(page.slug)" class="btn btn-danger btn-sm">Delete</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+
+    <!-- ============ page editor ============ -->
+    <section class="card">
+        <div class="card-head">
+            <div>
+                <h2>{{selectedPage ? 'Edit' : 'Add'}} page</h2>
+            </div>
+        </div>
+        <div class="card-body">
+            <form [formGroup]="pagesForm" (ngSubmit)="onSubmit()">
+                <div class="field">
+                    <label for="pg-title">Page title <span class="req">*</span></label>
+                    <input formControlName="title" id="pg-title" type="text" value="Frequently Asked Questions">
+                </div>
+                <div class="field">
+                    <label for="pg-slug">URL slug <span class="req">*</span></label>
+                    <input formControlName="slug" id="pg-slug" type="text" value="faq">
+                </div>
+
+                <div class="field">
+                <label>Content</label>
+                <textarea formControlName="content"></textarea>
+                </div>
+
+                <label class="toggle">
+                    <input formControlName="active" type="checkbox" checked>
+                    <span class="track"></span>
+                    <span class="toggle-label">Published — visible on the storefront</span>
+                </label>
+                <div class="form-actions">
+                    <button (click)="cancel()" type="button" class="btn btn-danger">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+</div>

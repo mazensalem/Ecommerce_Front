@@ -1,0 +1,119 @@
+<!-- stat strip -->
+<section class="stat-grid">
+    <div class="stat-card rail rail-accent">
+        <div class="stat-top">
+        <div class="stat-icon" style="background:var(--accent-tint); color:var(--accent-ink);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3l-6.1 3.3 1.4-6.8-5.1-4.7 6.9-.8L12 2z"/></svg>
+        </div>
+        </div>
+        <div class="stat-value">{{totalApprovedCount + totalDeclinedCount + totalPendingCount}}</div>
+        <div class="stat-label">Total testimonials</div>
+    </div>
+    <div class="stat-card rail rail-ok">
+        <div class="stat-top">
+        <div class="stat-icon" style="background:var(--ok-tint); color:var(--ok);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        </div>
+        <div class="stat-value">{{totalApprovedCount}}</div>
+        <div class="stat-label">Approved</div>
+    </div>
+    <div class="stat-card rail rail-warn">
+        <div class="stat-top">
+        <div class="stat-icon" style="background:var(--warn-tint); color:var(--warn);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        </div>
+        </div>
+        <div class="stat-value">{{totalPendingCount}}</div>
+        <div class="stat-label">Awaiting review</div>
+    </div>
+    <div class="stat-card rail rail-bad">
+        <div class="stat-top">
+        <div class="stat-icon" style="background:var(--bad-tint); color:var(--bad-ink);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M15 9l-6 6M9 9l6 6"/>
+            </svg>
+        </div>
+        </div>
+        <div class="stat-value">{{totalDeclinedCount}}</div>
+        <div class="stat-label">Declined</div>
+    </div>
+</section>
+
+<div class="two-col">
+
+<!-- ============ testimonials list ============ -->
+<section class="card">
+    <div class="toolbar">
+        <div class="toolbar-left">
+            <div class="tabs">
+                <div (click)="setfilter('all')" class="tab" [ngClass]="{'active': filter == 'all'}">All</div>
+                <div (click)="setfilter('pendding')" class="tab" [ngClass]="{'active': filter == 'pendding'}">Pending</div>
+                <div (click)="setfilter('approved')" class="tab" [ngClass]="{'active': filter == 'approved'}">Approved</div>
+                <div (click)="setfilter('canceld')" class="tab" [ngClass]="{'active': filter == 'canceld'}">Canceld</div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body flush">
+    <table>
+        <thead>
+        <tr>
+            <th></th><th>Customer</th><th>Rating</th><th>Testimonial</th><th>Status</th><th></th>
+        </tr>
+        </thead>
+        <tbody>
+            @for (test of tests; track $index) {
+                <tr class="rail" [ngClass]="{'rail-ok': test.status=='approved', 'rail-warn': test.status == 'pendding', 'rail-bad': test.status == 'canceld'}">
+                    <td>
+                        <div class="row-media">
+                            <div class="avatar-sm">{{test.user.slice(0, 2)}}</div>
+                            <div>
+                                <div class="cell-primary">{{test.user}}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="stars">
+                            @for (star of [1, 2, 3, 4, 5]; track $index) {
+                                <svg [ngClass]="{'star-filled': star <= test.ratting}" viewBox="0 0 24 24"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3l-6.1 3.3 1.4-6.8-5.1-4.7 6.9-.8L12 2z"/></svg>
+                            }
+                        </span>
+                    </td>
+                    <td class="quote-cell">
+                        <p>{{test.text}}</p>
+                    </td>
+                    <td>
+                        <span class="badge" [ngClass]="{'badge-ok': test.status=='approved', 'badge-warn': test.status == 'pendding', 'badge-bad': test.status == 'canceld'}">{{test.status}}</span>
+                    </td>
+                    <td class="row-actions">
+                        @if (test.status == 'pendding') {
+                            <button (click)="setStatus(test._id, 'approved')" class="btn btn-secondary btn-sm">Approve</button>
+                            <button (click)="setStatus(test._id, 'canceld')" class="btn btn-danger btn-sm">Reject</button>
+                        }
+                        @else if (test.status == 'canceld'){
+                            <button (click)="setStatus(test._id, 'approved')" class="btn btn-secondary btn-sm">Approve</button>
+                        }@else {
+                            <button (click)="setStatus(test._id, 'canceld')" class="btn btn-danger btn-sm">Reject</button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="pager">
+        <span class="count">Showing 5 of {{totalApprovedCount + totalDeclinedCount + totalPendingCount}} testimonials</span>
+        <div class="pager-btns">
+        <button (click)="dec()" [ngClass]="{'disabled': currentPage == 1}" class="page-btn">‹</button>
+        @for (page of [currentPage - 1, currentPage, currentPage + 1]; track $index) {
+            @if (page > 0 && page <= totalPage) {
+                <button class="page-btn" [ngClass]="{'active': page == currentPage}">{{page}}</button>
+            }
+        }
+        <button (click)="inc()" [ngClass]="{'disabled': currentPage == totalPage}" class="page-btn">›</button>
+        </div>
+    </div>
+    </div>
+</section>
+
+</div>

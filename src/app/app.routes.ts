@@ -11,11 +11,27 @@ import { Products } from './dashboard/products/products';
 import { Catagories } from './dashboard/catagories/catagories';
 import { Admins } from './dashboard/admins/admins';
 import { Pages } from './dashboard/pages/pages';
+import { Testimonials } from './dashboard/testimonials/testimonials';
+import { Profile } from './front/users/profile/profile';
+import { Search } from './front/products/search/search';
+import { Cart } from './front/users/cart/cart';
+import { Categories } from './front/home/categories/categories';
+import { ProductPage } from './front/products/product-page/product-page';
+import { Login as UserLogin } from './front/users/login/login';
+import { Signup } from './front/users/signup/signup';
 
 export const routes: Routes = [
     {path: '', component: Front, children: [
         {path: '',  redirectTo: '/home', pathMatch: 'full'},
-        {path: 'home', component: Home}
+        {path: 'home', component: Home},
+        {path: 'profile', component: Profile},
+        {path: 'search/:title', component: Search},
+        {path: 'cart', component: Cart},
+        {path: 'category/:slug', component: Categories},
+        {path: 'product/:slug', component: ProductPage},
+        {path: 'login', component: UserLogin},
+        {path: 'signup', component: Signup}
+
     ]},
     {path: 'admin/login', component: Login},
     {path: 'admin',canActivate: [adminGuard],  component: Dashboard, children: [
@@ -25,7 +41,8 @@ export const routes: Routes = [
         {path: 'products', component: Products},
         {path: 'categories', component: Catagories},
         {path: 'admins', component: Admins},
-        {path: 'pages', component: Pages}
+        {path: 'pages', component: Pages},
+        {path: 'Testimonial', component: Testimonials}
 
     ]},
     {path: '**', component: NotFound}

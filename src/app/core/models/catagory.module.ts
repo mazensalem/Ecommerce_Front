@@ -7,6 +7,10 @@ export interface ICatagory {
     isDeleted:boolean;
 }
 
+export interface IHomeCatagory extends ICatagory {
+    productCount: number;
+}
+
 export interface IViewCatagory {
     _id: string;
     name: string;
