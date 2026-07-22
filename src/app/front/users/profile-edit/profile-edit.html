@@ -1,0 +1,55 @@
+<div class="card-head">
+    <div>
+        <h2>Edit profile</h2>
+        <div class="hint">Update your personal information</div>
+    </div>
+</div>
+@if (editForm) {
+
+    <div class="card-body">
+        <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+            <div class="form-grid">
+                <div class="field span-2">
+                    <label for="e-first">name <span class="req">*</span></label>
+                    <input formControlName="name" id="e-first" type="text">
+                </div>
+            <div class="field span-2">
+                <label for="e-email">Email address <span class="req">*</span></label>
+                <input disabled [value]="editForm.value['email']" class="disabled" id="e-email" type="email" >
+            </div>
+            <div class="field">
+                <label for="e-phone">Phone number</label>
+                <input formControlName="phone" id="e-phone" type="tel">
+            </div>
+            <div class="field">
+                <label for="e-dob">Date of birth</label>
+                <input formControlName="dateOfBirth" id="e-dob" type="date">
+            </div>
+            </div>
+    
+            <div class="card" style="background:var(--surface-sunk); border-style:dashed; margin-top:4px;">
+            <div class="card-body">
+                <div style="font-weight:600; font-size:13.5px; margin-bottom:14px;">Change password</div>
+                <div class="form-grid">
+                <div class="field span-2">
+                    <label for="e-cur">Current password</label>
+                    <input formControlName="oldPassword" id="e-cur" type="password" placeholder="••••••••">
+                </div>
+                <div class="field">
+                    <label for="e-new">New password</label>
+                    <input formControlName="newPassword" id="e-new" type="password" placeholder="••••••••">
+                </div>
+                <div class="field">
+                    <label for="e-new2">Confirm new password</label>
+                    <input formControlName="reNewPassword" id="e-new2" type="password" placeholder="••••••••">
+                </div>
+                </div>
+            </div>
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:10px; padding:16px 22px; border-top:1px solid var(--border); background:var(--surface-sunk); border-radius:0 0 var(--radius-lg) var(--radius-lg);">
+                <a routerLink="/profile/" class="btn btn-secondary">Cancel</a>
+                <button class="btn btn-primary">Save changes</button>
+            </div>
+        </form>
+    </div>
+}

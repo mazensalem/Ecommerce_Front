@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OrderView } from './order-view';
+import { SubCategories } from './sub-categories';
 
-describe('OrderView', () => {
-  let component: OrderView;
-  let fixture: ComponentFixture<OrderView>;
+describe('SubCategories', () => {
+  let component: SubCategories;
+  let fixture: ComponentFixture<SubCategories>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [OrderView],
+      imports: [SubCategories],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(OrderView);
+    fixture = TestBed.createComponent(SubCategories);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

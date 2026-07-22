@@ -15,14 +15,21 @@
         <input id="Search" type="text" placeholder="Search products…">
       </form>
     </div>
+
     <div class="header-actions">
-      <a class="head-icon-btn" routerLink="/profile" aria-label="Account">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      </a>
-      <a class="head-icon-btn" routerLink="/cart" aria-label="Cart">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.6 12.4a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 7H6"/></svg>
-        <span class="cart-count">3</span>
-      </a>
+      @if (user) {
+        <a class="user-chip" routerLink="/profile">
+          <span class="user-chip-name">{{user.name}}</span>
+        </a>
+        <button style="cursor: pointer;" (click)="logout()" type="button" class="head-icon-btn" title="Log out" aria-label="Log out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        </button>
+        <a class="head-icon-btn" routerLink="/cart" aria-label="Cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.6 12.4a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 7H6"/></svg><span class="cart-count">{{cartCount}}</span></a>
+      }
+      @else {
+        <span style="font-size:13px; color:var(--text-dim);">New here?</span>
+        <a routerLink="/signup" class="btn btn-secondary btn-sm">Create account</a>
+      }
     </div>
   </div>
 </header>

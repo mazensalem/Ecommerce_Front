@@ -1,1 +1,50 @@
-<p>signup works!</p>
+<main class="wrap" style="max-width:480px; padding-top:60px; padding-bottom:100px;">
+  <div style="text-align:center; margin-bottom:28px;">
+    <div class="brand-mark" style="margin:0 auto 16px;">S</div>
+    <h1 style="font-size:24px; margin-bottom:6px;">Create your account</h1>
+    <p style="color:var(--text-dim); font-size:13.5px;">Join for faster checkout, order tracking, and member offers</p>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+        <div class="form-grid">
+          <div class="field span-2">
+            <label for="r-first">name <span class="req">*</span></label>
+            <input formControlName="name" id="r-first" type="text" placeholder="Laila">
+          </div>
+          <div class="field span-2">
+            <label for="r-email">Email address <span class="req">*</span></label>
+            <input formControlName="email" id="r-email" type="email" placeholder="you@example.com">
+          </div>
+          <div class="field span-2">
+            <label for="r-phone">Phone number</label>
+            <input formControlName="phone" id="r-phone" type="tel" placeholder="+20 100 000 0000">
+          </div>
+          <div class="field span-2">
+            <label for="DateofBirth">Date of Birth<span class="req">*</span></label>
+            <input formControlName="dateOfBirth" id="DateofBirth" type="date">
+          </div>
+          <div class="field">
+            <label for="r-pass">Password <span class="req">*</span></label>
+            <input formControlName="password" id="r-pass" type="password" placeholder="••••••••">
+          </div>
+          <div class="field">
+            <label for="r-pass2">Confirm password <span class="req">*</span></label>
+            <input formControlName="repassword" id="r-pass2" type="password" placeholder="••••••••">
+          </div>
+        </div>
+
+        <label style="display:flex; align-items:flex-start; gap:9px; font-size:12.5px; color:var(--text-mid); margin-bottom:20px;">
+            I agree to the Terms of Service and Privacy Policy
+        </label>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg">Create account</button>
+      </form>
+    </div>
+  </div>
+  
+    <div class="form-foot-link">Already have an account? 
+        <a routerLink="/login">Sign in</a>
+    </div>
+</main>

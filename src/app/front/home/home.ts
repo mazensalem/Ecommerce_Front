@@ -9,7 +9,7 @@ import { NgClass, NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, NgClass, NgStyle],
+  imports: [RouterLink, NgStyle],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })

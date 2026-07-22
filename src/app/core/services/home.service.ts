@@ -5,6 +5,7 @@ import { env } from '../../../env/env';
 import { IHomeCatagory } from '../models/catagory.module';
 import { IProduct } from '../models/products.module';
 import { ITest } from '../models/Testimonials.module';
+import { IPage } from '../models/page.module';
 
 @Injectable({
   providedIn: 'root',
@@ -23,5 +24,9 @@ export class HomeService {
 
   getTest(){
     return this._http.get<IResponse<ITest[]>>(this.url + 'page/test/');
+  }
+
+  getPages(){
+    return this._http.get<IResponse<IPage[]>>(this.url + 'page/');
   }
 }

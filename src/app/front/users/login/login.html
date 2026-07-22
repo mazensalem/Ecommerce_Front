@@ -1,1 +1,27 @@
-<p>login works!</p>
+<main class="wrap" style="max-width:420px; padding-top:60px; padding-bottom:100px;">
+    <div style="text-align:center; margin-bottom:28px;">
+    <div class="brand-mark" style="margin:0 auto 16px;">S</div>
+    <h1 style="font-size:24px; margin-bottom:6px;">Welcome back</h1>
+    <p style="color:var(--bad); font-size:13.5px;">{{errorMSG}}</p>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="field">
+          <label for="l-email">Email address</label>
+          <input formControlName="email" id="l-email" type="email" placeholder="you@example.com" autocomplete="username">
+        </div>
+        <div class="field">
+          <label for="l-pass" style="display:flex; justify-content:space-between;">
+            <span>Password</span>
+          </label>
+          <input formControlName="password" id="l-pass" type="password" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block btn-lg">Sign in</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="form-foot-link">Don't have an account? <a routerLink="/signup">Create one</a></div>
+</main>

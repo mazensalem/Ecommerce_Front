@@ -1,1 +1,64 @@
-<p>cart works!</p>
+<main class="wrap">
+  <h1 style="font-size:24px; margin-bottom:18px;">Your cart</h1>
+
+  <div class="cart-layout">
+    <!-- ============ items ============ -->
+    <section class="card">
+      <div class="card-body" style="padding:0;">
+
+        @for (product of products; track $index) {
+            <div class="cart-item">
+              <div class="cart-thumb">
+                <img width="100%" height="100%" [src]="staticFilePath + product.productId.imgUrl" />
+              </div>
+              <div class="cart-item-info">
+                <div class="name">{{product.productId.title}}</div>
+                <div class="cart-item-actions">
+                  <div class="qty-stepper">
+                    <button (click)="dec(product.productId._id)" type="button">–</button>
+                    <input type="text" [value]="product.quantity" disabled>
+                    <button (click)="inc(product.productId._id)" type="button">+</button>
+                  </div>
+                  <span (click)="remove(product.productId._id)" class="remove-link">Remove</span>
+                </div>
+              </div>
+              <div class="cart-item-price">
+                <div style="font-weight:700; font-family:var(--font-display);">${{product.pricePerUnit * product.quantity}}</div>
+                <span class="badge" [ngClass]="{'badge-ok': product.quantity <= product.productId.stock, 'badge-bad': product.quantity > product.productId.stock}" style="margin-top:auto;">
+                    {{product.quantity > product.productId.stock ? 'Out of Stock' : 'In stock'}}
+                </span>
+              </div>
+            </div>
+        }
+
+      </div>
+      <div style="padding: 16px 22px;">
+        <a routerLink="/search" class="btn btn-secondary btn-sm">← Continue shopping</a>
+      </div>
+    </section>
+
+    <!-- ============ summary ============ -->
+    <aside class="card">
+      <div class="card-head"><h2>Order summary</h2></div>
+      <div class="card-body">
+        <div class="field">
+            <label>Saved address</label>
+            <select id="addressSelect">
+                @for (address of addresses; track $index) {
+                    <option [value]="address._id">{{address.title}} {{address.isDefault ? '- Default' : ''}}</option>
+                }
+            </select>
+        </div>
+
+        <div class="summary-line total">
+            <span>Total</span>
+            <span>${{products.reduce((ac, el)=>el.pricePerUnit*el.quantity, 0)}}</span>
+        </div>
+
+        <button (click)="checkout()" class="btn btn-primary btn-block btn-lg" style="margin-top:16px;">
+            Checkout
+        </button>
+      </div>
+    </aside>
+  </div>
+</main>

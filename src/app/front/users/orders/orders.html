@@ -1,1 +1,52 @@
-<p>orders works!</p>
+    <!-- ============ orders ============ -->
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h2>My orders</h2>
+          <div class="hint">Track, view, or reorder from your order history</div>
+        </div>
+      </div>
+
+      <div style="padding: 16px 22px 0;">
+        <div class="parent-cat-strip" style="margin: 0 0 4px;">
+          <span (click)="setStatus('All')" style="cursor: pointer;" class="parent-cat-pill" [ngClass]="{'active': status == 'All'}">All</span>
+          <span (click)="setStatus('Pendding')" style="cursor: pointer;" class="parent-cat-pill" [ngClass]="{'active': status == 'Pendding'}">Pendding</span>
+          <span (click)="setStatus('Preparing')" style="cursor: pointer;" class="parent-cat-pill" [ngClass]="{'active': status == 'Preparing'}">Processing</span>
+          <span (click)="setStatus('Shipped')" style="cursor: pointer;" class="parent-cat-pill" [ngClass]="{'active': status == 'Shipped'}">Shipped</span>
+          <span (click)="setStatus('Recieved')" style="cursor: pointer;" class="parent-cat-pill" [ngClass]="{'active': status == 'Recieved'}">Delivered</span>
+          <span (click)="setStatus('Rejected')" style="cursor: pointer;" class="parent-cat-pill" [ngClass]="{'active': status == 'Rejected' || status == 'Canceled by admin' || status == 'Canceled by user'}">Cancelled</span>
+        </div>
+      </div>
+
+      <div class="card-body" style="padding:0;">
+
+        @for (order of orders; track $index) {
+            <div class="order-row">
+              <div class="order-thumbs">
+                <div class="t"></div>
+              </div>
+              <div class="order-info">
+                <div class="id">Order #{{order._id.slice(-5)}}</div>
+                <div class="meta">Placed {{order.createdAt | date : 'mediumDate'}} · {{order.products.reduce((ac, el)=>el.quantity, 0)}} item</div>
+              </div>
+              <span class="badge" [ngClass]="{
+                    'badge-warn': order.status == 'Preparing',
+                    'badge-accent': order.status == 'Shipped',
+                    'badge-bad': order.status == 'Canceled by admin' || order.status == 'Canceled by user' || order.status == 'Rejected',
+                    'badge-idle': order.status == 'Pendding',
+                    'badge-ok': order.status == 'Recieved'}">{{order.status}}</span>
+              <div class="order-total">${{order.products.reduce((ac, el)=>el.pricePerUnit*el.quantity, 0)}}</div>
+            </div>
+        }
+      </div>
+
+      <div class="pager" style="padding: 20px 0 24px;">
+        <button class="page-btn" [ngClass]="{'disabled': currentPage == 1   }" (click)="dec()">‹</button>
+        @for (page of [currentPage - 1, currentPage, currentPage + 1]; track $index) {
+            @if (page >= 1 && page <= AllPages){
+                <button (click)="setPage(page)" class="page-btn" [ngClass]="{'active': page == currentPage}">1</button>
+            }
+        }
+        <button class="page-btn" [ngClass]="{'disabled': currentPage == AllPages}" (click)="inc()">›</button>
+      </div>
+    </section>

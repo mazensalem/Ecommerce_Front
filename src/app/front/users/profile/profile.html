@@ -1,1 +1,47 @@
-<p>profile works!</p>
+@if (user) {
+
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-head">
+      <div>
+        <h2>Profile</h2>
+        <div class="hint">Your personal information</div>
+      </div>
+      <a routerLink="profileEdit" class="btn btn-secondary btn-sm">Edit profile</a>
+    </div>
+    <div class="card-body">
+      <div class="info-row"><span class="k">Full name</span><span class="v">{{user.name}}</span></div>
+      <div class="info-row"><span class="k">Email address</span><span class="v">{{user.email}}</span></div>
+      <div class="info-row"><span class="k">Phone number</span><span class="v">{{user.phone}}</span></div>
+      <div class="info-row"><span class="k">Date of birth</span><span class="v">{{user.dateOfBirth}}</span></div>
+    </div>
+  </div>
+  
+  <div class="card">
+    <div class="card-head">
+      <div>
+        <h2>Recent orders</h2>
+        <div class="hint">Your latest purchases</div>
+      </div>
+      <a routerLink="/orders" style="font-size:13px; font-weight:600; color:var(--accent-ink);">View all</a>
+    </div>
+    <div class="card-body" style="display:flex; flex-direction:column; gap:0; padding:0;">
+      @for (order of orders; track $index) {
+        <div class="info-row" style="padding:16px 22px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div class="cart-thumb" style="width:46px; height:46px;"></div>
+            <div>
+              <div class="v">Order #{{order._id.slice(-5)}}</div>
+              <div class="k">{{order.createdAt | date : 'mediumDate'}} · {{order.products.reduce((ac, el)=>el.quantity, 0)}} items · ${{order.products.reduce((ac, el)=>el.pricePerUnit * el.quantity, 0)}}</div>
+            </div>
+          </div>
+          <span class="badge" [ngClass]="{
+        'badge-warn': order.status == 'Preparing',
+        'badge-accent': order.status == 'Shipped',
+        'badge-bad': order.status == 'Canceled by admin' || order.status == 'Canceled by user' || order.status == 'Rejected',
+        'badge-idle': order.status == 'Pendding',
+        'badge-ok': order.status == 'Recieved'}">{{order.status}}</span>
+        </div>
+      }
+    </div>
+  </div>
+}

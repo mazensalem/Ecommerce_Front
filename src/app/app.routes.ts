@@ -19,18 +19,29 @@ import { Categories } from './front/home/categories/categories';
 import { ProductPage } from './front/products/product-page/product-page';
 import { Login as UserLogin } from './front/users/login/login';
 import { Signup } from './front/users/signup/signup';
+import { SubCategories } from './front/home/sub-categories/sub-categories';
+import { ProfileSkeleton } from './front/users/profile-skeleton/profile-skeleton';
+import { Address } from './front/users/address/address';
+import { Orders as UserOrder } from "./front/users/orders/orders"
+import { ProfileEdit } from './front/users/profile-edit/profile-edit';
 
 export const routes: Routes = [
     {path: '', component: Front, children: [
         {path: '',  redirectTo: '/home', pathMatch: 'full'},
         {path: 'home', component: Home},
-        {path: 'profile', component: Profile},
-        {path: 'search/:title', component: Search},
+        {path: 'search', component: Search},
         {path: 'cart', component: Cart},
         {path: 'category/:slug', component: Categories},
         {path: 'product/:slug', component: ProductPage},
         {path: 'login', component: UserLogin},
-        {path: 'signup', component: Signup}
+        {path: 'signup', component: Signup},
+        {path: 'subcateogry/:slug', component: SubCategories},
+        {path: '', component: ProfileSkeleton, children: [
+            {path: 'profile', component: Profile},
+            {path: 'profile/profileEdit', component: ProfileEdit},
+            {path: 'orders', component: UserOrder},
+            {path: 'address', component: Address}
+        ]}
 
     ]},
     {path: 'admin/login', component: Login},

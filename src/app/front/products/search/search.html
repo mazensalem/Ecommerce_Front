@@ -1,1 +1,55 @@
-<p>search works!</p>
+
+<main class="wrap">
+  <div class="search-layout">
+    <!-- ============ filters ============ -->
+    <aside>
+      <div class="filter-block" style="padding-top:0;">
+        <h4>Category</h4>
+        @for (category of catagories;track category){
+            <label class="filter-row">
+                <input type="checkbox" (click)="toggleCat(category)" [checked]="activeCatagories.includes(category)"> {{category.name}} <span class="n">{{category.productCount}}</span>
+            </label>
+        }
+      </div>
+
+      <div class="filter-block">
+        <h4>Price range</h4>
+        <div class="price-range">
+          <input type="number" placeholder="Min" (change)="setMinPrice($event)">
+          <span style="color:var(--text-dim);">–</span>
+          <input type="number" placeholder="Max" (change)="setMaxPrice($event)">
+        </div>
+      </div>
+
+      <button (click)="clearFilters()" class="btn btn-secondary btn-block">Clear filters</button>
+    </aside>
+
+    <!-- ============ results ============ -->
+    <section>
+      <div class="product-grid">
+        @for (product of products; track $index) {
+            <a class="product-card" [routerLink]="`/product/${product.slug}`">
+                <div class="product-media">
+                    <img width="100%" height="100%" [src]="staticFilesPath + product.imgUrl" />
+                </div>
+                <div class="product-body">
+                <div class="product-cat">{{product.catagory.name}} · {{product.subCatagory.name}}</div>
+                <div class="product-name">{{product.title}}</div>
+                <div class="product-price"><span class="price-now">${{product.price}}</span></div>
+              </div>
+            </a>
+        }
+      </div>
+
+      <div class="pager" (click)="dec()">
+        <button class="page-btn">‹</button>
+        @for (page of [currentPage - 1, currentPage, currentPage + 1]; track $index) {
+          @if (page >= 1 && page <= totalPages) {
+            <button class="page-btn" (click)="setPage(page)" [ngClass]="{'active': page == currentPage}">{{page}}</button>
+          }
+        }
+        <button class="page-btn" (click)="inc()">›</button>
+      </div>
+    </section>
+  </div>
+</main>

@@ -5,6 +5,7 @@ export interface ICatagory {
     slug:string;
     isActive:boolean;
     isDeleted:boolean;
+    productCount?: number;
 }
 
 export interface IHomeCatagory extends ICatagory {

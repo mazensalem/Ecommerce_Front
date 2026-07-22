@@ -1,1 +1,70 @@
-<p>address works!</p>
+<section>
+    <div class="card" style="margin-bottom:20px;">
+    <div class="card-head">
+        <div>
+        <h2>Saved addresses</h2>
+        <div class="hint">Manage where your orders get delivered</div>
+        </div>
+        <button (click)="goToAdd()" class="btn btn-primary btn-sm">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
+        Add address
+        </button>
+    </div>
+    <div class="card-body">
+        <div class="address-grid">
+            @for (address of addresses; track $index) {
+                <div class="address-card" [ngClass]="{'default': address.isDefault}">
+                    @if (address.isDefault) {
+                        <span class="badge badge-accent" style="position:absolute; top:16px; right:16px;">Default</span>
+                    }
+                    <div style="font-weight:600; font-size:13.5px; margin-bottom:4px;">{{address.title}}</div>
+                    <div style="font-size:13px; color:var(--text-mid); line-height:1.7;">
+                    {{address.address}}<br>
+                    {{address.phone}}
+                    </div>
+                    <div style="display:flex; gap:8px; margin-top:14px;">
+                    <button (click)="selectAddress(address)" class="btn btn-secondary btn-sm">Edit</button>
+                    <button (click)="deleteAddress(address._id)" class="btn btn-danger btn-sm">Delete</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    </div>
+
+    <!-- ============ add address form ============ -->
+    <section class="card" id="address-form" #myform>
+    <div class="card-head">
+        <div>
+            <h2>{{selectedAddress ? 'Edit' : 'Add'}} address</h2>
+            <div class="hint">Fields marked with <span class="req">*</span> are required</div>
+        </div>
+    </div>
+    <div class="card-body">
+        <form [formGroup]="addForm" (ngSubmit)="onSubmit()">
+            <div class="field">
+                <label for="ad-label">Address label</label>
+                <input formControlName="title" id="ad-label" type="text" placeholder="e.g. Home, Work">
+            </div>
+            <div class="form-grid">
+                <div class="field span-2">
+                    <label for="ad-street">address <span class="req">*</span></label>
+                    <textarea formControlName="address" id="ad-street" type="text" placeholder="Street name, building, apartment"></textarea>
+                </div>
+                <div class="field span-2">
+                    <label for="ad-phone">Phone number <span class="req">*</span></label>
+                    <input formControlName="phone" id="ad-phone" type="tel" placeholder="+20 100 000 0000">
+                </div>
+            </div>
+            <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-mid);">
+                <input formControlName="isDefault" type="checkbox" style="width:15px; height:15px; accent-color:var(--accent);">
+                Set as default shipping address
+            </label>
+            <div style="display:flex; justify-content:flex-end; gap:10px; padding:16px 22px; border-top:1px solid var(--border); background:var(--surface-sunk); border-radius:0 0 var(--radius-lg) var(--radius-lg);">
+                <button class="btn btn-secondary" type="button" (click)="cancel()">Cancel</button>
+                <button class="btn btn-primary">Save address</button>
+            </div>
+        </form>
+    </div>
+    </section>
+</section>

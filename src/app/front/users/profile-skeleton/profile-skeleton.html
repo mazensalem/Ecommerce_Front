@@ -1,0 +1,37 @@
+<main class="wrap">
+  <div class="breadcrumbs"><a routerLink="/">Home</a><span class="sep">/</span><span class="here">My account</span></div>
+
+  <div class="account-layout">
+    <!-- ============ account sidebar ============ -->
+    <aside class="account-card">
+      <div class="account-profile">
+        @if (user) {
+          <div class="account-avatar">{{user.name.slice(0, 2)}}</div>
+          <div class="name">{{user.name}}</div>
+          <div class="email">{{user.email}}</div>
+        }
+      </div>
+      <ul class="account-nav">
+        <li><a routerLinkActive="active" routerLink="profile">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Profile
+        </a></li>
+        <li><a routerLinkActive="active" routerLink="orders">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.6 12.4a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 7H6"/></svg>
+          Orders
+        </a></li>
+        <li><a routerLinkActive="active" routerLink="address">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Addresses
+        </a></li>
+        <li><a (click)="logOut()" style="cursor: pointer;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+          Log out
+        </a></li>
+      </ul>
+    </aside>
+    <section>
+        <router-outlet />
+    </section>
+  </div>
+</main>
